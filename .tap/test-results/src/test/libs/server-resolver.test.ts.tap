@@ -1,0 +1,17 @@
+TAP version 14
+# Subtest: test getServerUrl
+    ok 1 - should be equivalent strictly
+    ok 2 - should be equivalent strictly
+    ok 3 - should be equivalent strictly
+    1..3
+ok 1 - test getServerUrl # time=5.412ms
+
+All available servers: http://server2.com, http://server3.com
+# Subtest: test healthCheck
+    ok 1 - should be equivalent strictly
+    ok 2 - should be equivalent strictly
+    ok 3 - should be equivalent strictly
+    1..3
+ok 2 - test healthCheck # time=9.563ms
+
+1..2

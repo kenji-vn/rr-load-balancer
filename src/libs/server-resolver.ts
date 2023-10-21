@@ -6,14 +6,16 @@ class ServerResolver {
   private serverSelector: RoundRobinSelector;
   private scheduler = new ToadScheduler();
 
-  constructor(servers: string[] = []) {
+  constructor(servers: string[] = [], healthCheckInterval = 5) {
     this.serverSelector = new RoundRobinSelector(servers);
 
-    const task = new Task("Health monitor", () => {
-      this.updateServersWithHealthCheck();
-    });
-    const job = new SimpleIntervalJob({ seconds: 5 }, task);
-    this.scheduler.addSimpleIntervalJob(job);
+    if (healthCheckInterval > 0) {
+      const task = new Task("Health monitor", () => {
+        this.updateServersWithHealthCheck();
+      });
+      const job = new SimpleIntervalJob({ seconds: healthCheckInterval }, task);
+      this.scheduler.addSimpleIntervalJob(job);
+    }
 
     console.warn("Created LoadBalancer");
   }
@@ -30,7 +32,7 @@ class ServerResolver {
     return result;
   }
 
-  private async updateServersWithHealthCheck() {
+  public async updateServersWithHealthCheck() {
     try {
       const allServers = this.serverSelector.getServersList();
       const healthChecks = await this.fetchHealthChecks(allServers);
@@ -43,6 +45,10 @@ class ServerResolver {
     } catch (error) {
       console.warn("Error in servers monitoring cron job: " + error);
     }
+  }
+
+  public getServersList() {
+    return this.serverSelector.getServersList();
   }
 
   private async fetchHealthChecks(servers: string[]) {

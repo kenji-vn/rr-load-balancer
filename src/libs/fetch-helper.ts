@@ -35,4 +35,4 @@ async function fetchAndRetryDifferentUrl(
   }
 }
 
-export { fetchWithTimeout, fetchAndRetryDifferentUrl };
+export { fetchWithTimeout, fetchAndRetryDifferentUrl, RequestInitWithTimeout };

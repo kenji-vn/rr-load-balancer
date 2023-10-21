@@ -1,0 +1,8 @@
+TAP version 14
+# Subtest: test getServerUrl
+    ok 1 - should be equivalent strictly
+    ok 2 - should be equivalent strictly
+    ok 3 - should be equivalent strictly
+    1..3
+ok 1 - test getServerUrl # time=6.771ms
+

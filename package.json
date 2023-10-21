@@ -6,6 +6,7 @@
   "main": "balancer.ts",
   "scripts": {
     "build": "tsc",
+    "test": "npm run build && c8 tap run",
     "gateway": "npm run build && node dist/gateway.js",
     "worker": "npm run build && PORT=3001 node dist/worker.js",
     "all-workers": "concurrently \"PORT=3001 node dist/worker.js\"  \"PORT=3002 node dist/worker.js\" \"PORT=3003 node dist/worker.js\"",
@@ -28,11 +29,12 @@
     "fastify": "^4.0.0",
     "fastify-plugin": "^4.0.0",
     "fastify-raw-body": "^4.2.2",
-    "parallelshell": "^3.0.2",
     "toad-scheduler": "^3.0.0"
   },
   "devDependencies": {
     "@types/node": "^20.8.7",
+    "@types/proxyquire": "^1.3.30",
+    "@types/sinon": "^10.0.20",
     "@typescript-eslint/eslint-plugin": "^6.7.3",
     "concurrently": "^7.0.0",
     "cross-env": "^7.0.3",
@@ -43,6 +45,8 @@
     "eslint-plugin-n": "^16.1.0",
     "eslint-plugin-promise": "^6.1.1",
     "fastify-tsconfig": "^1.0.1",
-    "prettier": "3.0.3"
+    "prettier": "3.0.3",
+    "sinon": "^17.0.0",
+    "tap": "^18.5.2"
   }
 }

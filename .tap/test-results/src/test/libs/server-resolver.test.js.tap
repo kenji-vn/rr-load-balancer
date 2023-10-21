@@ -1,0 +1,53 @@
+TAP version 14
+# Subtest: test getServerUrl
+    ok 1 - should be equivalent strictly
+    ok 2 - should be equivalent strictly
+    ok 3 - should be equivalent strictly
+    1..3
+ok 1 - test getServerUrl # time=11.108ms
+
+# Subtest: test healthCheck
+    not ok 1 - ES Modules cannot be stubbed
+      ---
+      stack: |
+        Function.stub (node_modules/sinon/pkg/sinon-esm.js:3849:15)
+        Sandbox.stub (node_modules/sinon/pkg/sinon-esm.js:3328:39)
+        Test.<anonymous> (src/test/libs/server-resolver.test.js:20:25)
+      at:
+        fileName: node_modules\sinon\pkg\sinon-esm.js
+        lineNumber: 3849
+        columnNumber: 15
+        typeName: Function
+        methodName: stub
+        functionName: Function.stub
+      type: TypeError
+      tapCaught: returnedPromiseRejection
+      source: |2
+      
+            if (isEsModule(object)) {
+                throw new TypeError("ES Modules cannot be stubbed");
+        --------------^
+            }
+      ...
+    
+    1..1
+not ok 2 - test healthCheck # time=2296.746ms
+  ---
+  at:
+    fileName: src\test\libs\server-resolver.test.js
+    lineNumber: 17
+    columnNumber: 3
+    isToplevel: true
+  source: "});\r
+  
+    \r
+  
+    t.test(\"test healthCheck\", async (t) => {\r
+  
+    --^
+  
+    \  let resolver = new ServerResolver([\"server1\", \"server2\",
+    \"server3\"], 0);\n"
+  ...
+
+1..2
