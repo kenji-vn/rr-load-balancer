@@ -1,0 +1,48 @@
+{
+  "name": "demo-coda",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Round robin load balancer",
+  "main": "balancer.ts",
+  "scripts": {
+    "build": "tsc",
+    "gateway": "npm run build && node dist/gateway.js",
+    "worker": "npm run build && PORT=3001 node dist/worker.js",
+    "all-workers": "concurrently \"PORT=3001 node dist/worker.js\"  \"PORT=3002 node dist/worker.js\" \"PORT=3003 node dist/worker.js\"",
+    "all-set": "npm run build && concurrently \"node dist/gateway.js\" \"PORT=3001 node dist/worker.js\"  \"PORT=3002 node dist/worker.js\" \"PORT=3003 node dist/worker.js\"",
+    "dev": "npm run build && concurrently -k -p \"[{name}]\" -n \"TypeScript,App\" -c \"yellow.bold,cyan.bold\" \"npm:watch\" \"npm:dev:start\"",
+    "dev:start": "node --watch dist/balancer.js",
+    "lint": "eslint .",
+    "watch": "tsc -w"
+  },
+  "keywords": [],
+  "author": "Phuong Nguyen",
+  "license": "ISC",
+  "dependencies": {
+    "@fastify/sensible": "^5.0.0",
+    "@fastify/under-pressure": "^8.3.0",
+    "@fastify/url-data": "^5.3.1",
+    "@types/async-lock": "^1.4.1",
+    "async-lock": "^1.4.0",
+    "dotenv": "^16.3.1",
+    "fastify": "^4.0.0",
+    "fastify-plugin": "^4.0.0",
+    "fastify-raw-body": "^4.2.2",
+    "parallelshell": "^3.0.2",
+    "toad-scheduler": "^3.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.8.7",
+    "@typescript-eslint/eslint-plugin": "^6.7.3",
+    "concurrently": "^7.0.0",
+    "cross-env": "^7.0.3",
+    "eslint": "^8.50.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-config-standard-with-typescript": "^39.1.0",
+    "eslint-plugin-import": "^2.28.1",
+    "eslint-plugin-n": "^16.1.0",
+    "eslint-plugin-promise": "^6.1.1",
+    "fastify-tsconfig": "^1.0.1",
+    "prettier": "3.0.3"
+  }
+}
