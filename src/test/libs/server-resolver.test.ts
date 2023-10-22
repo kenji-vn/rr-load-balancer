@@ -1,5 +1,5 @@
 import t from "tap";
-import { ServerResolver } from "../../libs/server-resolver.js";
+import { ServerResolver } from "../../services/server-resolver.js";
 import sinon from "sinon";
 import { jsonOk } from "./test-helper.js";
 
@@ -22,7 +22,7 @@ t.test("test healthCheck", async (t) => {
 
   let resolver = new ServerResolver(["http://server1.com", "http://server2.com", "http://server3.com"], 0);
 
-  await resolver.updateServersWithHealthCheck();
+  await resolver.refreshServersList();
 
   let serversList = resolver.getServersList();
 

@@ -1,6 +1,7 @@
 type RequestInitWithTimeout = NodeJS.fetch.RequestInit & { timeout: number };
 
 async function fetchWithTimeout(url: string, options: RequestInitWithTimeout) {
+  options.timeout = options.timeout ?? 5000;
   const controller = new AbortController();
 
   const id = setTimeout(() => controller.abort(), options.timeout);
@@ -10,25 +11,24 @@ async function fetchWithTimeout(url: string, options: RequestInitWithTimeout) {
     signal: controller.signal,
   });
   clearTimeout(id);
-
+  if (!response.ok) {
+    throw new Error("Fail result returned from fetch");
+  }
   return response;
 }
 
-//TODO: is this too complex now ?
-//url get from a function, new value every time ?
 async function fetchAndRetryDifferentUrl(
-  getFetchUrl: (path: string | undefined) => string,
-  fetchPath: string | undefined,
+  getFetchUrl: () => string,
   options: RequestInitWithTimeout,
   shouldRetry = true,
 ): Promise<Response> {
   try {
-    const url = getFetchUrl(fetchPath);
+    const url = getFetchUrl();
     const response = await fetchWithTimeout(url, options);
     return response;
-  } catch (error: any) {
-    if (shouldRetry && error.name === "AbortError") {
-      return fetchAndRetryDifferentUrl(getFetchUrl, fetchPath, options, false);
+  } catch (error) {
+    if (shouldRetry) {
+      return fetchAndRetryDifferentUrl(getFetchUrl, options, false);
     } else {
       throw error;
     }

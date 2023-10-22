@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 import Fastify, { FastifyInstance } from "fastify";
 import { fastifyRawBody } from "fastify-raw-body";
 import urlData from "@fastify/url-data";
-import { gatewayRoutes } from "./routes/gateway-routes.js";
+import { gatewayController } from "./controllers/gateway-controller.js";
 
 // Read the .env file.
 dotenv.config();
@@ -16,11 +16,10 @@ const app: FastifyInstance = Fastify({
 
 await app.register(fastifyRawBody);
 await app.register(urlData);
-app.register(gatewayRoutes);
+app.register(gatewayController);
 
 app.addHook("onResponse", (request, reply, done) => {
   app.log.info(`${reply.getHeader("server")}, ${reply.getResponseTime()}, ${reply.statusCode}`);
-
   done();
 });
 

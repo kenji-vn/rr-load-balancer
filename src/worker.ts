@@ -1,8 +1,7 @@
 import dotenv from "dotenv";
 import Fastify, { FastifyInstance } from "fastify";
 import { fastifyUnderPressure } from "@fastify/under-pressure";
-import { workerRoutes } from "./routes/worker-routes.js";
-import { fetchWithTimeout } from "./libs/fetch-helper.js";
+import { joinLoadBalancer, workerController } from "./controllers/worker-controller.js";
 import { AddressInfo } from "net";
 
 // Read the .env file.
@@ -16,7 +15,7 @@ const app: FastifyInstance = Fastify({
   logger: true,
 });
 
-app.register(workerRoutes);
+app.register(workerController);
 
 app.register(fastifyUnderPressure, {
   maxEventLoopDelay: 1000,
@@ -25,26 +24,21 @@ app.register(fastifyUnderPressure, {
   maxEventLoopUtilization: 0.98,
 });
 
+app.addHook("onListen", async () => {
+  const serverAddress = app.server.address() as AddressInfo;
+  const workerUrl = `http://${serverAddress.address}:${serverAddress.port}`;
+
+  try {
+    const joinResult = await joinLoadBalancer(workerUrl, loadBalancerUrl);
+    app.log.info(`Joined load balancer ${joinResult ? "successfully" : "unsuccessfully"} !`);
+  } catch (error) {
+    app.log.info(`Error occured when joining load balancer: ${error}`);
+  }
+});
+
 app.listen({ port: listeningPort, host: "0.0.0.0" }, (err) => {
   if (err) {
     app.log.error(err);
     process.exit(1);
-  }
-});
-
-app.addHook("onListen", async () => {
-  try {
-    const serverAddress = app.server.address() as AddressInfo;
-    const url = `http://${serverAddress.address}:${serverAddress.port}`;
-
-    const joinResult = await fetchWithTimeout(`${loadBalancerUrl}/join?server=${url}`, { method: "POST", timeout: 10000 });
-
-    if (!joinResult.ok) {
-      app.log.error("Failed to join load balancer !");
-    } else {
-      app.log.info("Joined load balancer successfully !");
-    }
-  } catch (error) {
-    app.log.error("Failed to join load balancer !");
   }
 });

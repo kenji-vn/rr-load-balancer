@@ -2,7 +2,7 @@
 //@ts-ignore
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { FastifyInstance } from "fastify";
-import { ServerResolver } from "../libs/server-resolver.js";
+import { ServerResolver } from "../services/server-resolver.js";
 
 declare module "fastify" {
   export interface FastifyInstance {
