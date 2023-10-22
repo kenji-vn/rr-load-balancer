@@ -1,4 +1,5 @@
 import dotenv from "dotenv";
+import random from "random";
 import Fastify, { FastifyInstance } from "fastify";
 import { fastifyUnderPressure } from "@fastify/under-pressure";
 import { joinLoadBalancer, workerController } from "./controllers/worker-controller.js";
@@ -7,9 +8,8 @@ import { AddressInfo } from "net";
 // Read the .env file.
 dotenv.config();
 const loadBalancerUrl = process.env.LoadBalancer || "http://localhost:3000";
-const listeningPort = Number(process.env.PORT) || 3001;
+const listeningPort = Number(process.env.PORT) || random.int(3100, 3999);
 
-// Instantiate main Fastify app
 const app: FastifyInstance = Fastify({
   disableRequestLogging: true,
   logger: true,
@@ -17,6 +17,7 @@ const app: FastifyInstance = Fastify({
 
 app.register(workerController);
 
+//This set up the conditions for app.isUnderPressure()
 app.register(fastifyUnderPressure, {
   maxEventLoopDelay: 1000,
   maxHeapUsedBytes: 100000000,

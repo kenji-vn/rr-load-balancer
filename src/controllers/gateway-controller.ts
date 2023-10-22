@@ -1,27 +1,34 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 
-import serverResolver from "../configs/server-resolver-config.js";
+import loadBalancer from "../configs/load-balancer-config.js";
 import { fetchAndRetryDifferentUrl } from "../utils/fetch-helper.js";
 
 const gatewayController = async (app: FastifyInstance) => {
-  app.decorate("serverResolver", serverResolver);
+  app.decorate("loadBalancer", loadBalancer);
 
+  /**
+   * This gateway supports dynamic registration, a worker server can call this endpoint to register itself to the list of serving workers
+   */
   app.post("/join", async function (req: FastifyRequest, reply: FastifyReply) {
     const server = (req.query as Record<string, string>).server;
     if (server) {
-      app.serverResolver.registerServer(server);
+      app.loadBalancer.registerServer(server);
     } else {
       reply.statusCode = 400;
     }
   });
 
+  /**
+   * Main endpoint of the gateway, redirect all requests that this gateway recieves to one of its worker servers
+   */
   app.post("*", async function (req: FastifyRequest, reply: FastifyReply) {
     const path = req.urlData().path;
 
     let getUrl = () => {
-      return app.serverResolver.getServerUrl(path);
+      return app.loadBalancer.resolveUrl(path);
     };
 
+    //If one worker server takes too long, try again with a different worker server. Only try 2 times max.
     const response = await fetchAndRetryDifferentUrl(getUrl, {
       method: "Post",
       timeout: 5000,

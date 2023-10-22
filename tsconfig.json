@@ -10,5 +10,5 @@
     "target": "ES2022",
     "esModuleInterop": true
   },
-  "include": ["src/**/*.ts", ".eslintrc.cjs", "src/test/libs/server-resolver.test.ts", "src/utils/fetch-helper.ts"]
+  "include": ["src/**/*.ts", ".eslintrc.cjs", "src/test/services/load-balancer.test.ts", "src/utils/fetch-helper.ts"]
 }

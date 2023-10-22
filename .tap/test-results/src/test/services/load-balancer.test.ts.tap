@@ -1,0 +1,40 @@
+TAP version 14
+# Subtest: test getServerUrl, server list has 3 items, resolve url correctly
+    ok 1 - should be equivalent strictly
+    ok 2 - should be equivalent strictly
+    ok 3 - should be equivalent strictly
+    ok 4 - should be equivalent strictly
+    ok 5 - should be equivalent strictly
+    1..5
+ok 1 - test getServerUrl, server list has 3 items, resolve url correctly # time=5.779ms
+
+# Subtest: test getServerUrl, server list is empty, throw expcetion
+    ok 1 - getServerUrl should throw exception when server list is empty
+    1..1
+ok 2 - test getServerUrl, server list is empty, throw expcetion # time=1.714ms
+
+All available servers: server1
+# Subtest: Integration test registerServer and selectServer(), start from empty server list, add and use new servers correctly
+    ok 1 - should be equivalent strictly
+    ok 2 - should be equivalent strictly
+    ok 3 - should be equivalent strictly
+    ok 4 - should be equivalent strictly
+All available servers: server1, server2
+    ok 5 - should be equivalent strictly
+    ok 6 - should be equivalent strictly
+    ok 7 - should be equivalent strictly
+    ok 8 - should be equivalent strictly
+    1..8
+ok 3 - Integration test registerServer and selectServer(), start from empty server list, add and use new servers correctly # time=2.844ms
+
+All available servers: server2, server3
+# Subtest: Integration test refreshServersList, add and remove servers correctly by their status
+    ok 1 - should be equivalent strictly
+All available servers: server2, server1
+    ok 2 - should be equivalent strictly
+All available servers: server1
+    ok 3 - should be equivalent strictly
+    1..3
+ok 4 - Integration test refreshServersList, add and remove servers correctly by their status # time=13.293ms
+
+1..4

@@ -6,6 +6,7 @@
   "main": "gateway.ts",
   "scripts": {
     "gateway": "npm run build && node dist/gateway.js",
+    "worker": "npm run build && node dist/worker.js",
     "worker1": "npm run build && PORT=3001 node dist/worker.js",
     "worker2": "npm run build && PORT=3002 node dist/worker.js",
     "worker3": "npm run build && PORT=3003 node dist/worker.js",
@@ -29,6 +30,7 @@
     "fastify": "^4.0.0",
     "fastify-plugin": "^4.0.0",
     "fastify-raw-body": "^4.2.2",
+    "random": "^4.1.0",
     "toad-scheduler": "^3.0.0"
   },
   "devDependencies": {

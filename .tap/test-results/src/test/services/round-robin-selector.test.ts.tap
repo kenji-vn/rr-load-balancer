@@ -1,0 +1,45 @@
+TAP version 14
+# Subtest: test LoadBalancer constructor, server list has dupp items, throw exception
+    ok 1 - LoadBalancer constructor should throw exception when server list has dupp items
+    1..1
+ok 1 - test LoadBalancer constructor, server list has dupp items, throw exception # time=4.896ms
+
+# Subtest: getServersList, servers list has no items, getServersList should returns empty
+    ok 1 - should be equivalent strictly
+    1..1
+ok 2 - getServersList, servers list has no items, getServersList should returns empty # time=1.04ms
+
+# Subtest: getServersList, servers list has items, getServersList returns all items
+    ok 1 - should be equivalent strictly
+    1..1
+ok 3 - getServersList, servers list has items, getServersList returns all items # time=0.337ms
+
+# Subtest: selectServer, servers list has 0 items, selectServer should return undefined
+    ok 1 - should be equivalent strictly
+    1..1
+ok 4 - selectServer, servers list has 0 items, selectServer should return undefined # time=0.315ms
+
+# Subtest: selectServer, servers list has items, selectServer should return correct round-robin result
+    ok 1 - should be equivalent strictly
+    1..1
+ok 5 - selectServer, servers list has items, selectServer should return correct round-robin result # time=0.943ms
+
+# Subtest: selectServer, servers list has 1 item, selectServer should return only 1 item
+    ok 1 - should be equivalent strictly
+    1..1
+ok 6 - selectServer, servers list has 1 item, selectServer should return only 1 item # time=0.368ms
+
+# Subtest: setServerList, override old server list by calling setServerList, server list should get new data
+    ok 1 - should be equivalent strictly
+    ok 2 - should be equivalent strictly
+    ok 3 - should be equivalent strictly
+    ok 4 - should be equivalent strictly
+    1..4
+ok 7 - setServerList, override old server list by calling setServerList, server list should get new data # time=0.596ms
+
+# Subtest: setServerList, setServerList with dupp items, throw exception
+    ok 1 - setServerList should throw exception when server list has dupp items
+    1..1
+ok 8 - setServerList, setServerList with dupp items, throw exception # time=0.327ms
+
+1..8

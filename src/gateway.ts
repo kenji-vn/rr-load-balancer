@@ -8,7 +8,6 @@ import { gatewayController } from "./controllers/gateway-controller.js";
 dotenv.config();
 const listeningPort = Number(process.env.PORT) || 3000;
 
-// Instantiate main Fastify app
 const app: FastifyInstance = Fastify({
   disableRequestLogging: true,
   logger: true,

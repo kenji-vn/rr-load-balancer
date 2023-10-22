@@ -1,46 +1,48 @@
-import AsyncLock from "async-lock";
-
+/**
+ * Choosing one server from a list of servers in a circular order (round robin).
+ */
 class RoundRobinSelector {
-  private roundRobinIndex: number;
   private servers: string[];
-  private lock: AsyncLock;
+  private roundRobinIndex: number;
+  private duppItemsErrorMessage = "Round robin selector should not have dupplicated items.";
 
   constructor(servers: string[]) {
+    if (this.hasDuppItems(servers)) {
+      throw new Error(this.duppItemsErrorMessage);
+    }
     this.servers = servers;
     this.roundRobinIndex = 0;
-    this.lock = new AsyncLock();
   }
 
-  getServersList() {
+  public getServerList() {
     return this.servers;
   }
+  public setServerList(servers: string[]) {
+    if (this.hasDuppItems(servers)) {
+      throw new Error(this.duppItemsErrorMessage);
+    }
+    this.servers = servers;
+  }
 
-  selectServer(): string | undefined {
+  public selectServer(): string | undefined {
     let availableServers = this.servers;
     if (availableServers.length == 0) {
       return undefined;
     }
 
     const serverIndex = this.roundRobinIndex % availableServers.length;
+    const server = availableServers[serverIndex];
+
+    if (this.roundRobinIndex === Number.MAX_SAFE_INTEGER) {
+      this.roundRobinIndex = 0;
+    }
     this.roundRobinIndex++;
 
-    return availableServers[serverIndex];
+    return server;
   }
 
-  async updateServers(addServers: string[], removeServers: string[]) {
-    await this.lock.acquire("servers", () => {
-      let currentServers = new Set(this.servers);
-      for (let addServer of addServers) {
-        if (!currentServers.has(addServer)) {
-          this.servers.push(addServer);
-        }
-      }
-
-      let toRemoveServers = new Set(removeServers);
-      this.servers = this.servers.filter((server) => !toRemoveServers.has(server));
-
-      console.log(`All available servers: ${this.servers.join(", ")}`);
-    });
+  private hasDuppItems(list: string[]) {
+    return new Set(list).size !== list.length;
   }
 }
 
