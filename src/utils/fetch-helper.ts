@@ -26,16 +26,16 @@ async function fetchWithTimeout(url: string, options: RequestInitWithTimeout) {
  * The getFetchUrl() should return a new url everytime it gets called.
  */
 async function fetchAndRetryDifferentUrl(getFetchUrl: () => string, options: RequestInitWithTimeout): Promise<Response> {
-  let url = getFetchUrl();
+  const url = getFetchUrl();
   try {
-    let response = await fetchWithTimeout(url, options);
+    const response = await fetchWithTimeout(url, options);
     return response;
   } catch (error) {
     //Retry 1 more time with an alternative url
     let altUrl = getFetchUrl();
     altUrl = altUrl !== url ? altUrl : getFetchUrl(); // Make sure altUrl is not the same with the fail url
 
-    let response = await fetchWithTimeout(altUrl, options);
+    const response = await fetchWithTimeout(altUrl, options);
     return response;
   }
 }

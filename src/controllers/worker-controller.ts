@@ -25,7 +25,7 @@ const workerController = async (app: FastifyInstance) => {
  * Call this at startup time of this worker.
  */
 const joinLoadBalancer = async (workerUrl: string, gatewayUrl: string) => {
-  let response = await fetchWithTimeout(`${gatewayUrl}/join?server=${workerUrl}`, { method: "POST", timeout: 5000 });
+  const response = await fetchWithTimeout(`${gatewayUrl}/join?server=${workerUrl}`, { method: "POST", timeout: 5000 });
   return response.ok;
 };
 

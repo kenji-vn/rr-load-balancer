@@ -25,7 +25,7 @@ class RoundRobinSelector {
   }
 
   public selectServer(): string | undefined {
-    let availableServers = this.servers;
+    const availableServers = this.servers;
     if (availableServers.length == 0) {
       return undefined;
     }

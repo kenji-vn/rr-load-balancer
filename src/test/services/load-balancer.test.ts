@@ -62,8 +62,8 @@ t.test(
 );
 
 t.test("Integration test refreshServersList, add and remove servers correctly by their status", async (t) => {
-  let resolver = new LoadBalancer(["server1", "server2", "server3"], 0);
-  let stubFetch = sinon.stub(global, "fetch");
+  const resolver = new LoadBalancer(["server1", "server2", "server3"], 0);
+  const stubFetch = sinon.stub(global, "fetch");
 
   stubFetch.withArgs("server1/health", sinon.match.any).returns(jsonOk({ status: 0 }));
   stubFetch.withArgs("server2/health", sinon.match.any).returns(jsonOk({ status: 1 }));
@@ -106,9 +106,9 @@ t.test("Integration test refreshServersList, add and remove servers correctly by
    */
   function checkRoundRobin(numberOfGetServerUrl: number, serverList: string[]): boolean {
     let checkResult = true;
-    let roundRobinCount = serverList.length;
+    const roundRobinCount = serverList.length;
     for (let i = 0; i < numberOfGetServerUrl; i++) {
-      let url = resolver.resolveUrl();
+      const url = resolver.resolveUrl();
       checkResult &&= url === serverList[i % roundRobinCount];
     }
 

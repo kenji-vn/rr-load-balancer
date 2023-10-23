@@ -59,8 +59,8 @@ class LoadBalancer {
     try {
       const healthChecks = await this.fetchHealthChecks(this.allServers);
 
-      let goodServers = healthChecks.filter((s) => s["status"] === 1).map((s) => s.address);
-      let badServers = healthChecks.filter((s) => s["status"] !== 1).map((s) => s.address);
+      const goodServers = healthChecks.filter((s) => s["status"] === 1).map((s) => s.address);
+      const badServers = healthChecks.filter((s) => s["status"] !== 1).map((s) => s.address);
 
       await this.updateServers(goodServers, badServers);
     } catch (error) {
@@ -73,15 +73,15 @@ class LoadBalancer {
    */
   private async updateServers(goodServers: string[], badServers: string[]) {
     await this.lock.acquire("servers", async () => {
-      let allServerSet = new Set(this.allServers);
-      let serverInFarmSet = new Set(this.serverSelector.getServerList());
+      const allServerSet = new Set(this.allServers);
+      const serverInFarmSet = new Set(this.serverSelector.getServerList());
 
-      for (let addServer of goodServers) {
+      for (const addServer of goodServers) {
         allServerSet.add(addServer);
         serverInFarmSet.add(addServer);
       }
 
-      for (let removeServer of badServers) {
+      for (const removeServer of badServers) {
         serverInFarmSet.delete(removeServer);
       }
 
@@ -105,7 +105,7 @@ class LoadBalancer {
 
           const result = (await response.json()) as Record<string, number>;
           return { address: server, status: result.status };
-        } catch (error: any) {
+        } catch (error) {
           return { address: server, status: 0 };
         }
       }),

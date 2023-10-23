@@ -49,6 +49,7 @@
     "fastify-tsconfig": "^1.0.1",
     "prettier": "3.0.3",
     "sinon": "^17.0.0",
-    "tap": "^18.5.2"
+    "tap": "^18.5.2",
+    "typescript": "^5.2.2"
   }
 }

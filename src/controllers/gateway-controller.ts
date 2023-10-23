@@ -24,7 +24,7 @@ const gatewayController = async (app: FastifyInstance) => {
   app.post("*", async function (req: FastifyRequest, reply: FastifyReply) {
     const path = req.urlData().path;
 
-    let getUrl = () => {
+    const getUrl = () => {
       return app.loadBalancer.resolveUrl(path);
     };
 
