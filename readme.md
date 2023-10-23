@@ -6,9 +6,9 @@ Demo a simple load balancer written in TypeScript/Nodejs.
 
 Features:
 
-    - Distribute requests to all workers using a round-robin approach.
-    - Workers auto join the load balancer.
-    - The load balancer monitors all workers, removes slow or dead workers, and adds them back when they are healthy.
+- Distribute requests to all workers using a round-robin approach.
+- Workers auto join the load balancer.
+- The load balancer monitors all workers, removes slow or dead workers, and adds them back when they are healthy.
 
 ### Local setup and testing
 
@@ -47,15 +47,15 @@ Run these commands from the root directory.
 1. Project is written in TypeScript/Nodejs using [Fastify framework.](https://www.fastify.io)
 2. Main code files:
 
-- src/services/load-balancer.ts 
+- `src/services/load-balancer.ts`
     - The main class, has all features of this demo load balancer.
-- src/services/round-robin-selector.ts
+- `src/services/round-robin-selector.ts`
     - The select algorithm used in load-balancer.ts  
-- src/controllers/gateway-controller.ts
+- `src/controllers/gateway-controller.ts`
     - 1 endpoint to let worker join the gateway ("/join")
     - 1 endpoint to receive all POST requests from users, then distribute requests to workers.
-- src/controllers/worker-controller.ts
+- `src/controllers/worker-controller.ts`
     - 1 endpoint to handle the work ("/")
     - 1 endpoint to receive health check from the gateway ("/health")
-- src/test/**
+- `src/test/**`
     - unit tests of this project

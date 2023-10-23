@@ -19,7 +19,7 @@
   },
   "keywords": [],
   "author": "Phuong Nguyen",
-  "license": "ISC",
+  "license": "To be updated",
   "dependencies": {
     "@fastify/sensible": "^5.0.0",
     "@fastify/under-pressure": "^8.3.0",
