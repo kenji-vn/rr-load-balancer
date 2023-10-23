@@ -26,8 +26,8 @@ app.register(fastifyUnderPressure, {
 });
 
 app.addHook("onListen", async () => {
-  const serverAddress = app.server.address() as AddressInfo;
-  const workerUrl = `http://${serverAddress.address}:${serverAddress.port}`;
+  const workerAddress = app.server.address() as AddressInfo;
+  const workerUrl = `http://${workerAddress.address}:${workerAddress.port}`;
 
   try {
     const joinResult = await joinLoadBalancer(workerUrl, loadBalancerUrl);
