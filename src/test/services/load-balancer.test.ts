@@ -35,7 +35,7 @@ t.test(
     const resolver = new LoadBalancer([], 0);
 
     //Register server1, all links should use server1
-    await resolver.registerServer("server1");
+    resolver.registerServer("server1");
 
     let url1 = resolver.resolveUrl("/path");
     let url2 = resolver.resolveUrl("/path");
@@ -48,7 +48,7 @@ t.test(
     t.strictSame(url4, "server1/path");
 
     //Register server2, all links should use server1 and server2, round robin
-    await resolver.registerServer("server2");
+    resolver.registerServer("server2");
     url1 = resolver.resolveUrl("/path");
     url2 = resolver.resolveUrl("/path");
     url3 = resolver.resolveUrl("/path");

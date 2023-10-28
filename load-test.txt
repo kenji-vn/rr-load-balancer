@@ -1,1 +1,1 @@
-autocannon -m POST -b '{\"game\":\"MobileLegends\",\"gamerID\":\"GYUTDTE\",\"points\":20}' -H Content-Type=application/json http://127.0.0.1:3000/demo
+autocannon -m POST -b '{\"game\":\"MobileLegends\",\"gamerID\":\"GYUTDTE\",\"points\":20}' -H Content-Type=application/json http://127.0.0.1:3000/ -t 3 -c 30

@@ -1,7 +1,6 @@
 import { fetchWithTimeout } from "../utils/fetch-helper.js";
 import { RoundRobinSelector } from "./round-robin-selector.js";
-import { ToadScheduler, SimpleIntervalJob, Task } from "toad-scheduler";
-import AsyncLock from "async-lock";
+import { ToadScheduler, SimpleIntervalJob, AsyncTask } from "toad-scheduler";
 
 /**
  * Simple Load Balancer.
@@ -14,17 +13,15 @@ class LoadBalancer {
   private serverSelector: RoundRobinSelector;
   private allServers: string[];
   private scheduler = new ToadScheduler();
-  private lock: AsyncLock;
   private healthCheckTimeout = 5000;
 
   constructor(servers: string[] = [], healthCheckSeconds = 5) {
     this.allServers = servers;
     this.serverSelector = new RoundRobinSelector(servers);
-    this.lock = new AsyncLock();
 
     if (healthCheckSeconds > 0) {
-      const task = new Task("Health monitor", () => {
-        this.refreshServersList();
+      const task = new AsyncTask("Health monitor", async () => {
+        await this.refreshServersList();
       });
       const job = new SimpleIntervalJob({ seconds: healthCheckSeconds }, task);
       this.scheduler.addSimpleIntervalJob(job);
@@ -48,8 +45,8 @@ class LoadBalancer {
    * Register a new server to the list of servers that are serving requests
    * @param server
    */
-  public async registerServer(server: string) {
-    await this.updateServers([server], []);
+  public registerServer(server: string) {
+    this.updateServers([server], []);
   }
 
   /**
@@ -62,33 +59,31 @@ class LoadBalancer {
       const goodServers = healthChecks.filter((s) => s["status"] === 1).map((s) => s.address);
       const badServers = healthChecks.filter((s) => s["status"] !== 1).map((s) => s.address);
 
-      await this.updateServers(goodServers, badServers);
+      this.updateServers(goodServers, badServers);
     } catch (error) {
-      console.warn("Error in servers monitoring cron job: " + error);
+      console.warn(`Error in servers monitoring cron job: ${error as string}`);
     }
   }
 
   /**
    * Add healthy servers and remove dead servers from the list of servers that are serving requests
    */
-  private async updateServers(goodServers: string[], badServers: string[]) {
-    await this.lock.acquire("servers", async () => {
-      const allServerSet = new Set(this.allServers);
-      const serverInFarmSet = new Set(this.serverSelector.getServerList());
+  private updateServers(goodServers: string[], badServers: string[]) {
+    const allServerSet = new Set(this.allServers);
+    const serverInFarmSet = new Set(this.serverSelector.getServerList());
 
-      for (const addServer of goodServers) {
-        allServerSet.add(addServer);
-        serverInFarmSet.add(addServer);
-      }
+    for (const addServer of goodServers) {
+      allServerSet.add(addServer);
+      serverInFarmSet.add(addServer);
+    }
 
-      for (const removeServer of badServers) {
-        serverInFarmSet.delete(removeServer);
-      }
+    for (const removeServer of badServers) {
+      serverInFarmSet.delete(removeServer);
+    }
 
-      this.allServers = [...allServerSet];
-      this.serverSelector.setServerList([...serverInFarmSet]);
-      console.log(`All available servers: ${this.serverSelector.getServerList().join(", ")}`);
-    });
+    this.allServers = [...allServerSet];
+    this.serverSelector.setServerList([...serverInFarmSet]);
+    console.log(`All available servers: ${this.serverSelector.getServerList().join(", ")}`);
   }
 
   /**

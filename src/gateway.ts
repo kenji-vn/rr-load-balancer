@@ -15,10 +15,10 @@ const app: FastifyInstance = Fastify({
 
 await app.register(fastifyRawBody);
 await app.register(urlData);
-app.register(gatewayController);
+await app.register(gatewayController);
 
 app.addHook("onResponse", (request, reply, done) => {
-  app.log.info(`${reply.getHeader("server")}, ${reply.getResponseTime()}, ${reply.statusCode}`);
+  app.log.info(`${reply.getHeader("server") as string}, ${reply.getResponseTime()}, ${reply.statusCode}`);
   done();
 });
 

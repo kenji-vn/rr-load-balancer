@@ -8,7 +8,7 @@ module.exports = {
     extends: [
       "prettier",
       "eslint:recommended",
-      "plugin:@typescript-eslint/recommended",
+      "plugin:@typescript-eslint/recommended-type-checked",
       "plugin:@typescript-eslint/stylistic",
     ],
     overrides: [
@@ -21,6 +21,13 @@ module.exports = {
           sourceType: "script",
         },
       },
+      {
+        files: ["src/test/**/*.test.ts"],
+        rules: {
+          "@typescript-eslint/no-floating-promises": "off",
+          "@typescript-eslint/require-await": "off"
+        }
+      },
     ],
     parser: "@typescript-eslint/parser",
     parserOptions: {
@@ -32,10 +39,10 @@ module.exports = {
     rules: {
       quotes: ["error", "double", { avoidEscape: true }],
       semi: "off",
-      "require-await": "off",
       "@typescript-eslint/semi": ["error", "always"],
       "@typescript-eslint/member-delimiter-style": "error",
       "@typescript-eslint/no-empty-interface": "off",
+      // "@typescript-eslint/no-floating-promises": "off",
+      // "@typescript-eslint/require-await": "off"
     },
   };
-  

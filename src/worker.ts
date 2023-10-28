@@ -15,10 +15,10 @@ const app: FastifyInstance = Fastify({
   logger: true,
 });
 
-app.register(workerController);
+await app.register(workerController);
 
 //This set up the conditions for app.isUnderPressure()
-app.register(fastifyUnderPressure, {
+await app.register(fastifyUnderPressure, {
   maxEventLoopDelay: 1000,
   maxHeapUsedBytes: 100000000,
   maxRssBytes: 100000000,
@@ -32,8 +32,8 @@ app.addHook("onListen", async () => {
   try {
     const joinResult = await joinLoadBalancer(workerUrl, loadBalancerUrl);
     app.log.info(`Joined load balancer ${joinResult ? "successfully" : "unsuccessfully"} !`);
-  } catch (error) {
-    app.log.info(`Error occured when joining load balancer: ${error}`);
+  } catch (error: unknown) {
+    app.log.info(`Error occured when joining load balancer: ${error as string}`);
   }
 });
 
